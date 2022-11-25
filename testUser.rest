@@ -1,0 +1,32 @@
+@host = http://localhost:5050
+
+###
+GET {{host}}
+
+###
+GET {{host}}/user
+
+###
+POST {{host}}/user
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "bam@dam.com",
+  "password": "sooooo"
+}
+
+### 
+GET {{host}}/user/637f3a64dcc40548d0f2571d
+
+### 
+PUT {{host}}/user/637f95c98ba06bb588beea77 
+Content-Type: application/json
+
+{
+"email": "changed@email.com"
+}
+
+
+###
+DELETE {{host}}/user/637f3a64dcc40548d0f2571d
