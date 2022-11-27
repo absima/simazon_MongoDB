@@ -1,28 +1,19 @@
 import { Product } from '../models/productModel.js';
 
-const getAllProducts = async (req, res) => {
-  try {
-    const allprods = await Product.find();
-    return res.json(allprods);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
 const createOneProduct = async (req, res) => {
-  try {
-    const {
-      name,
-      category,
-      image,
-      price,
-      countInStock,
-      brand,
-      rating,
-      numReviews,
-      description,
-    } = req.body;
+  const {
+    name,
+    category,
+    image,
+    price,
+    countInStock,
+    brand,
+    rating,
+    numReviews,
+    description,
+  } = req.body;
 
+  try {
     if (
       !name ||
       !category ||
@@ -49,6 +40,15 @@ const createOneProduct = async (req, res) => {
       description,
     });
     return res.json(newprod);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+const getAllProducts = async (req, res) => {
+  try {
+    const allprods = await Product.find();
+    return res.json(allprods);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -120,10 +120,23 @@ const removeOneProductById = async (req, res) => {
   }
 };
 
+// add one product to cart
+const addOneProductToCart = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const pr = await Product.findOne({ _id: id });
+    // .populate('cart')
+    res.status(200).json(pr);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 export {
-  getAllProducts,
   createOneProduct,
+  getAllProducts,
   getOneProductByID,
   updateOneProduct,
   removeOneProductById,
+  addOneProductToCart,
 };
