@@ -72,7 +72,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ error: 'please complete all details' });
     }
     const user = await User.findOne({ email: email });
-    console.log('user', user);
+    // console.log('user', user);
     if (!user) {
       return res.status(400).json({ error: 'user does not exist' });
     }

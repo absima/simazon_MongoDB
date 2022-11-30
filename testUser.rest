@@ -28,18 +28,6 @@ Content-Type: application/json
 }
 
 
-###
-DELETE {{host}}/user/637f3a64dcc40548d0f2571d
-
-### sign in
-POST {{host}}/user/signin
-Content-Type: application/json
-
-{
-  "email": "sima@meng.com",
-  "password": "pass"
-}
-
 ### register
 POST {{host}}/user/register
 Content-Type: application/json
