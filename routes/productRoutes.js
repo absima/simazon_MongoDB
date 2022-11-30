@@ -1,22 +1,22 @@
 import express from 'express';
 import {
-  getAllProducts,
-  createOneProduct,
-  getOneProductByID,
-  updateOneProduct,
-  removeOneProductById,
-  addOneProductToCart,
+  createProduct,
+  getProducts,
+  getProductByID,
+  updateProductByID,
+  deleteProductByID,
+  addProductToCart,
 } from '../controllers/productControllers.js';
 
 const productRouter = express.Router();
 
-productRouter.route('/').get(getAllProducts).post(createOneProduct);
+productRouter.route('/').get(getProducts).post(createProduct);
 productRouter
   .route('/:id')
-  .get(getOneProductByID)
-  .put(updateOneProduct)
-  .delete(removeOneProductById);
+  .get(getProductByID)
+  .put(updateProductByID)
+  .delete(deleteProductByID);
 
-productRouter.route('/cart/:id').get(addOneProductToCart);
+productRouter.route('/cart/:id').get(addProductToCart);
 
 export default productRouter;

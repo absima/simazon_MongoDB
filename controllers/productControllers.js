@@ -1,96 +1,95 @@
 import { Product } from '../models/productModel.js';
 
-const createOneProduct = async (req, res) => {
+// create a new product
+const createProduct = async (req, res) => {
   const {
-    name,
-    category,
-    image,
-    price,
-    countInStock,
-    brand,
-    rating,
-    numReviews,
+    title,
     description,
+    price,
+    discountPercentage,
+    rating,
+    stock,
+    brand,
+    category,
+    thumbnail,
+    images,
   } = req.body;
 
   try {
     if (
-      !name ||
-      !category ||
-      !image ||
+      !title ||
+      !description ||
       !price ||
-      !countInStock ||
-      !brand ||
+      !discountPercentage ||
       !rating ||
-      !numReviews ||
-      !description
+      !stock ||
+      !brand ||
+      !category ||
+      !thumbnail ||
+      !images
     ) {
       return res.status(400).json({ error: 'please complete all details' });
     }
 
-    const newprod = await Product.create({
-      name,
-      category,
-      image,
-      price,
-      countInStock,
-      brand,
-      rating,
-      numReviews,
+    const newProduct = await Product.create({
+      title,
       description,
+      price,
+      discountPercentage,
+      rating,
+      stock,
+      brand,
+      category,
+      thumbnail,
+      images,
     });
-    return res.json(newprod);
+    return res.json(newProduct);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
-const getAllProducts = async (req, res) => {
+// get all products
+const getProducts = async (req, res) => {
   try {
-    const allprods = await Product.find();
-    return res.json(allprods);
+    const allProducts = await Product.find();
+    return res.json(allProducts);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
-const getOneProductByID = async (req, res) => {
+// get a product by id
+const getProductByID = async (req, res) => {
   const { id } = req.params;
   try {
-    // const user = await User.find({ id });
-    const prdct = await Product.findOne({ _id: id });
-    res.status(200).json(prdct);
+    const product = await Product.findOne({ _id: id });
+    return res.json(product);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
-const updateOneProduct = async (req, res) => {
+// update a product by id
+const updateProductByID = async (req, res) => {
   const { id } = req.params;
-  const {
-    name,
-    category,
-    image,
-    price,
-    countInStock,
-    brand,
-    rating,
-    numReviews,
-    description,
-  } = req.body;
+  const { title, description, price, discountPercentage, rating, stock, brand, category, thumbnail, images } = req.body;
   try {
     const updating = await Product.findByIdAndUpdate(
-      { _id: id },
       {
-        name: name,
-        category: category,
-        image: image,
-        price: price,
-        countInStock: countInStock,
-        brand: brand,
-        rating: rating,
-        numReviews: numReviews,
+        _id: id,
+      },
+      {
+        title: title,
         description: description,
+        price: price,
+        discountPercentage: discountPercentage,
+        rating: rating,
+        stock: stock,
+        brand: brand,
+        category: category,
+        thumbnail: thumbnail,
+        images: images,
       },
       {
         new: true,
@@ -103,25 +102,18 @@ const updateOneProduct = async (req, res) => {
   }
 };
 
-const removeOneProductById = async (req, res) => {
+// delete a product by id
+const deleteProductByID = async (req, res) => {
   const { id } = req.params;
   try {
-    const deleting = await Product.findByIdAndDelete({
-      _id: id,
-    });
-    if (!deleting) {
-      return res.status(500).json({
-        message: 'item not found',
-      });
-    }
+    const deleting = await Product.findByIdAndDelete({ _id: id });
     return res.json(deleting);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
 
-// add one product to cart
-const addOneProductToCart = async (req, res) => {
+const addProductToCart = async (req, res) => {
   const { id } = req.params;
   try {
     const pr = await Product.findOne({ _id: id });
@@ -132,11 +124,63 @@ const addOneProductToCart = async (req, res) => {
   }
 };
 
-export {
-  createOneProduct,
-  getAllProducts,
-  getOneProductByID,
-  updateOneProduct,
-  removeOneProductById,
-  addOneProductToCart,
+// // add a product to cart
+// const addProductToCart = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const adding = await Product.findByIdAndUpdate(
+//       {
+//         _id: id,
+//       },
+//       {
+//         $inc: { stock: -1 },
+//       },
+//       {
+//         new: true,
+//         runValidators: true,
+//       }
+//     );
+//     return res.json(adding);
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// };
+
+// add a review to a product
+const addReview = async (req, res) => {
+  const { id } = req.params;
+  const { review } = req.body;
+  try {
+    const adding
+    = await
+    Product.findByIdAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        $push: { reviews: review },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    return res.json(adding);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 };
+
+
+export {
+  createProduct,
+  getProducts,
+  getProductByID,
+  updateProductByID,
+  deleteProductByID,
+  addProductToCart,
+};
+
+
+
+// 

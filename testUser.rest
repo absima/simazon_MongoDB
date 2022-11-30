@@ -30,3 +30,44 @@ Content-Type: application/json
 
 ###
 DELETE {{host}}/user/637f3a64dcc40548d0f2571d
+
+### sign in
+POST {{host}}/user/signin
+Content-Type: application/json
+
+{
+  "email": "sima@meng.com",
+  "password": "pass"
+}
+
+### register
+POST {{host}}/user/register
+Content-Type: application/json
+
+{
+  "name": "bbb yyy",
+  "email": "bbb@yyy.com",
+  "password": "xyzrms",
+  "passwordCheck": "xyzrms"
+}
+
+
+### log in
+POST {{host}}/user/login
+Content-Type: application/json
+
+{
+  "email": "sima@meng.com",
+  "password": "pass"
+}
+
+### log out
+POST {{host}}/user/logout
+Content-Type: application/json
+
+{
+  "email": "sima@meng.com"
+}
+
+### delete user
+DELETE {{host}}/user/638508871d9706d43b804eb1

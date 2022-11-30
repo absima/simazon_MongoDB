@@ -2,15 +2,11 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 const productSchema = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
-  category: {
-    type: String,
-    required: true,
-  },
-  image: {
+  description: {
     type: String,
     required: true,
   },
@@ -18,7 +14,15 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
-  countInStock: {
+  discountPercentage: {
+    type: Number,
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: true,
+  },
+  stock: {
     type: Number,
     required: true,
   },
@@ -26,18 +30,18 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  rating: {
-    type: Number,
-    required: true,
-  },
-  numReviews: {
-    type: Number,
-    required: true,
-  },
-  description: {
+  category: {
     type: String,
+    required: true,
+  },
+  thumbnail: {
+    type: String,
+    required: true,
+  },
+  images: {
+    type: [String],
     required: true,
   },
 });
 
-export const Product = model('product', productSchema);
+export const Product = model('item', productSchema);

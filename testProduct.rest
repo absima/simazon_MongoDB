@@ -1,0 +1,55 @@
+@host = http://localhost:5050
+
+###
+GET {{host}}
+
+###
+GET {{host}}/item
+
+###
+POST {{host}}/item
+Content-Type: application/json
+
+{
+  "title": "my product",
+  "description": "my product description",
+  "price": 100.00,
+  "discountPercentage": 10,
+  "rating": 5,
+  "stock": 100,
+  "brand": "my brand",
+  "category": "my category",
+  "thumbnail": "my thumbnail",
+  "images": [
+    "my image 1",
+    "my image 2"
+  ]
+}
+
+### get a product
+GET {{host}}/item/63858f31cc6f6fd885088f69
+
+### update a product
+PUT {{host}}/item/63858f31cc6f6fd885088f69
+Content-Type: application/json
+
+{
+  "title": "my product",
+  "description": "my product description",
+  "price": 200.00,
+  "discountPercentage": 10,
+  "rating": 5,
+  "stock": 100,
+  "brand": "my brand",
+  "category": "my category",
+  "thumbnail": "my thumbnail",
+  "images": [
+    "my image 1",
+    "my image 2"
+  ]
+}
+
+### delete a product
+DELETE {{host}}/item/63858dbbcc6f6fd885088f64
+
+
