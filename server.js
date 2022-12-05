@@ -1,28 +1,29 @@
 import 'dotenv/config';
 import express from 'express';
-import cors from 'cors'
+import cors from 'cors';
 import userRouter from './routes/userRoutes.js';
 import productRouter from './routes/productRoutes.js';
+import mongoConnect from './db/mongoConnection.js';
+import validateToken from './supp/validateToken.js';
 
-import mongoConnection from './db/mongoConnection.js';
-
-mongoConnection();
+mongoConnect();
 
 const app = express();
 const port = process.env.PORT || 5050;
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
-
-
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => res.status(200).json({ hello: 'welcome' }));
 app.use('/user', userRouter);
 app.use('/item', productRouter);
 
+app.get('/profile/:username', validateToken, (req, res) => {
+  console.log('Token is valid.');
+  console.log(req.username.username);
+});
 app.listen(port, () => console.log(`listening to port ${port}`));
-
 
 // // register endpoint
 // app.post("/register", (request, response) => {

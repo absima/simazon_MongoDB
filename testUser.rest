@@ -4,20 +4,31 @@
 GET {{host}}
 
 ###
-GET {{host}}/user
+GET {{host}}/user/1
+
+
 
 ###
-POST {{host}}/user
+POST {{host}}/user/register
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "email": "bam@dam.com",
-  "password": "sooooo"
+  "name": "Geni Abebe",
+  "username": "geniabebe",
+  "email": "geni@abebe.com",
+  "password": "Password1"
 }
 
-### 
-GET {{host}}/user/637f3a64dcc40548d0f2571d
+###  get user profile
+GET {{host}}/user/profile
+Content-Type: application/json
+
+{
+  "username": "simameng"
+}
+
+###
+GET {{host}}/user/pro
 
 ### 
 PUT {{host}}/user/637f95c98ba06bb588beea77 
