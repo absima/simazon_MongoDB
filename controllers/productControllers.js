@@ -53,8 +53,10 @@ const createProduct = async (req, res) => {
 const getProducts = async (req, res) => {
   try {
     const allProducts = await Product.find();
+    console.log('allProducts', allProducts);
     return res.json(allProducts);
   } catch (error) {
+    console.log('error', error)
     return res.status(500).json({ error: error.message });
   }
 };
@@ -73,7 +75,18 @@ const getProductByID = async (req, res) => {
 // update a product by id
 const updateProductByID = async (req, res) => {
   const { id } = req.params;
-  const { title, description, price, discountPercentage, rating, stock, brand, category, thumbnail, images } = req.body;
+  const {
+    title,
+    description,
+    price,
+    discountPercentage,
+    rating,
+    stock,
+    brand,
+    category,
+    thumbnail,
+    images,
+  } = req.body;
   try {
     const updating = await Product.findByIdAndUpdate(
       {
@@ -151,9 +164,7 @@ const addReview = async (req, res) => {
   const { id } = req.params;
   const { review } = req.body;
   try {
-    const adding
-    = await
-    Product.findByIdAndUpdate(
+    const adding = await Product.findByIdAndUpdate(
       {
         _id: id,
       },
@@ -171,7 +182,6 @@ const addReview = async (req, res) => {
   }
 };
 
-
 export {
   createProduct,
   getProducts,
@@ -181,6 +191,4 @@ export {
   addProductToCart,
 };
 
-
-
-// 
+//

@@ -44,10 +44,10 @@ POST {{host}}/user/register
 Content-Type: application/json
 
 {
-  "name": "bbb yyy",
-  "email": "bbb@yyy.com",
-  "password": "xyzrms",
-  "passwordCheck": "xyzrms"
+  "name": "Somebody Someone",
+  "email": "somebody@someone.com",
+  "password": "Password1",
+  "passwordCheck": "Password1"
 }
 
 
