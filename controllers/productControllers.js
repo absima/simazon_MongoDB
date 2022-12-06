@@ -53,10 +53,8 @@ const createProduct = async (req, res) => {
 const getProducts = async (req, res) => {
   try {
     const allProducts = await Product.find();
-    console.log('allProducts', allProducts);
     return res.json(allProducts);
   } catch (error) {
-    console.log('error', error)
     return res.status(500).json({ error: error.message });
   }
 };
