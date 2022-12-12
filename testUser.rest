@@ -14,10 +14,12 @@ Content-Type: application/json
 
 {
   "name": "Geni Abebe",
-  "username": "geniabebe",
-  "email": "geni@abebe.com",
+  "username": "geniabebe2",
+  "email": "geni2@abebe.com",
   "password": "Password1"
 }
+###
+GET {{host}}/user/profile
 
 ###  get user profile
 GET {{host}}/user/profile

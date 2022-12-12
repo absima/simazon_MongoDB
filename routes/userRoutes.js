@@ -18,7 +18,7 @@ userRouter.route('/login').post(loginUser);
 userRouter.route('/logout').post(logoutUser);
 
 // route for getting user profile
-userRouter.route('/profile').get(getUserProfile);
+userRouter.route('/profile/:username').get(getUserProfile);
 
 
 export default userRouter;
