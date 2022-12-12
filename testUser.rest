@@ -14,8 +14,8 @@ Content-Type: application/json
 
 {
   "name": "Geni Abebe",
-  "username": "geniabebe2",
-  "email": "geni2@abebe.com",
+  "username": "geniabebe4",
+  "email": "geni4@abebe.com",
   "password": "Password1"
 }
 ###
