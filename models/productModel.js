@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+
+mongoose.set('strictQuery', false);
+
 const { Schema, model } = mongoose;
 
 const productSchema = new Schema({

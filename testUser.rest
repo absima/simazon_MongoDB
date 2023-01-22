@@ -1,74 +1,65 @@
 @host = http://localhost:5050
 
-###
+### root
 GET {{host}}
 
-###
-GET {{host}}/user/1
-
-
-
-###
-POST {{host}}/user/register
-Content-Type: application/json
-
-{
-  "name": "Geni Abebe",
-  "username": "geniabebe4",
-  "email": "geni4@abebe.com",
-  "password": "Password1"
-}
-###
-GET {{host}}/user/profile
-
-###  get user profile
-GET {{host}}/user/profile
-Content-Type: application/json
-
-{
-  "username": "simameng"
-}
-
-###
-GET {{host}}/user/pro
-
-### 
-PUT {{host}}/user/637f95c98ba06bb588beea77 
-Content-Type: application/json
-
-{
-"email": "changed@email.com"
-}
-
+### get all users (not defined in user controller)
+GET {{host}}/user
 
 ### register
 POST {{host}}/user/register
 Content-Type: application/json
 
 {
-  "name": "Somebody Someone",
-  "email": "somebody@someone.com",
+  "name": "Sam Seifu",
+  "username": "samseifu",
+  "email": "sam@seifu.com",
   "password": "Password1",
   "passwordCheck": "Password1"
 }
-
 
 ### log in
 POST {{host}}/user/login
 Content-Type: application/json
 
 {
-  "email": "sima@meng.com",
-  "password": "pass"
+  "username": "simazon",
+  "password": "Password1"
 }
 
-### log out
-POST {{host}}/user/logout
+### update (not defined in user controller yet)
+PUT {{host}}/user/update/63c4f562fdec9de1fe31fdb9 
 Content-Type: application/json
 
 {
-  "email": "sima@meng.com"
+"email": "sima@zon.dom",
+"cart": [
+  {
+    "id": "5f5f5f5f5f5f5f5f5f5f5f5f",
+    "quantity": 1
+  },
+  {
+    "id": "5f5f67676767676767676767",
+    "quantity": 1
+  }],
+  "orders": [
+  {
+    "id": "5f5f5f5f5f5f5f5f5f5f5f5f",
+    "quantity": 1,
+    "status": "pending"
+  },
+  {
+    "id": "5f5f67676767676767676767",
+    "quantity": 1,
+    "status": "delivered"
+  }],
+  "paymentinfo": {
+    "type": "creditcard",
+    "cardnumber": "1234567890123456",
+    "expirationdate": "2020-12-31",
+    "securitycode": "123"
+  }
 }
 
-### delete user
-DELETE {{host}}/user/638508871d9706d43b804eb1
+### delete user (not defined in user controller yet)
+DELETE {{host}}/user/63c5ec460d5f63b62af4949c

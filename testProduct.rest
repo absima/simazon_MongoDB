@@ -1,4 +1,4 @@
-@host = http://localhost:5000
+@host = http://localhost:5050
 
 ###
 GET {{host}}
@@ -27,10 +27,10 @@ Content-Type: application/json
 }
 
 ### get a product
-GET {{host}}/item/63858f31cc6f6fd885088f69
+GET {{host}}/item/63c5f00d85528a36cf5d754b
 
 ### update a product
-PUT {{host}}/item/63858f31cc6f6fd885088f69
+PUT {{host}}/item/63c5f00d85528a36cf5d754b
 Content-Type: application/json
 
 {
@@ -50,6 +50,6 @@ Content-Type: application/json
 }
 
 ### delete a product
-DELETE {{host}}/item/63858dbbcc6f6fd885088f64
+DELETE {{host}}/item/63c5f00d85528a36cf5d754b
 
 
