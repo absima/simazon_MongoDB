@@ -17,8 +17,16 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => res.status(200).json({ key: 'hello, world?!' }));
 
+app.post("/debug/admin-key", (req, res) => {
+  res.json({
+    headerPresent: Boolean(req.header("x-admin-key")),
+    headerLength: (req.header("x-admin-key") || "").length
+  });
+});
+
+
 app.use('/user', userRouter);
-app.use('/item', productRouter);
+app.use('/product', productRouter);
 
 // app.get('/profile/:username', validateToken, (req, res) => {
 //   console.log('Token is valid.');

@@ -1,19 +1,25 @@
-@host = http://localhost:5050
-
 ###
 GET {{host}}
 
 ###
-GET {{host}}/item
+GET {{host}}/product
+
+### get a product
+GET {{host}}/product/6975b16bc8718c38629a1416
 
 ###
-POST {{host}}/item
+POST {{host}}/debug/admin-key
+x-admin-key: {{adminKey}}
+
+###
+POST {{host}}/product
 Content-Type: application/json
+x-admin-key: {{adminKey}}
 
 {
-  "title": "my product",
+  "title": "my product3",
   "description": "my product description",
-  "price": 100.00,
+  "price": 110.00,
   "discountPercentage": 10,
   "rating": 5,
   "stock": 100,
@@ -26,11 +32,29 @@ Content-Type: application/json
   ]
 }
 
-### get a product
-GET {{host}}/item/63c5f00d85528a36cf5d754b
+###
+# delete (protected)
+DELETE {{host}}/product/6975c540539c9fc89a538af6
+x-admin-key: {{adminKey}}
+
+{
+  "title": "my product3",
+  "description": "my product description",
+  "price": 110.00,
+  "discountPercentage": 10,
+  "rating": 5,
+  "stock": 100,
+  "brand": "my brand",
+  "category": "my category",
+  "thumbnail": "my thumbnail",
+  "images": [
+    "my image 1",
+    "my image 2"
+  ]
+}
 
 ### update a product
-PUT {{host}}/item/63c5f00d85528a36cf5d754b
+PUT {{host}}/product/63c5f00d85528a36cf5d754b
 Content-Type: application/json
 
 {
@@ -49,7 +73,8 @@ Content-Type: application/json
   ]
 }
 
+
 ### delete a product
-DELETE {{host}}/item/63c5f00d85528a36cf5d754b
+DELETE {{host}}/product/63c5f00d85528a36cf5d754b
 
 

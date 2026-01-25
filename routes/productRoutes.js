@@ -1,19 +1,66 @@
-import express from 'express';
+import express from "express";
 import {
   getProducts,
   getProductByID,
   addProductToCart,
-} from '../controllers/productControllers.js';
+  createProduct,
+  deleteProductByID,
+} from "../controllers/productControllers.js";
+
+import { requireAdminKey } from "../middleware/adminKey.js";
 
 const productRouter = express.Router();
 
-productRouter.route('/').get(getProducts)//.post(createProduct);
+// GET all products
+// POST create product (protected)
 productRouter
-  .route('/:id')
-  .get(getProductByID)
-  //.put(updateProductByID)
-  //.delete(deleteProductByID);
+  .route("/")
+  .get(getProducts)
+  .post(requireAdminKey, createProduct);
 
-productRouter.route('/cart/:id').get(addProductToCart);
+// GET product by id
+// DELETE product by id (protected)
+productRouter
+  .route("/:id")
+  .get(getProductByID)
+  .delete(requireAdminKey, deleteProductByID);
+
+// Cart route
+productRouter
+  .route("/cart/:id")
+  .get(addProductToCart);
 
 export default productRouter;
+
+
+// import express from "express";
+// import {
+//   getProducts,
+//   getProductByID,
+//   addProductToCart,
+//   createProduct,
+// } from "../controllers/productControllers.js";
+
+// import { requireAdminKey } from "../middleware/adminKey.js";
+
+// const productRouter = express.Router();
+
+// // GET all products
+// // POST create product (protected)
+// productRouter
+//   .route("/")
+//   .get(getProducts)
+//   .post(requireAdminKey, createProduct);
+
+// // GET product by id
+// productRouter
+//   .route("/:id")
+//   .get(getProductByID);
+
+// // Cart route (unchanged)
+// productRouter
+//   .route("/cart/:id")
+//   .get(addProductToCart);
+
+// export default productRouter;
+
