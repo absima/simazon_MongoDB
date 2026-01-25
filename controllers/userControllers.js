@@ -1,3 +1,4 @@
+// controllers/userControllers.js
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -8,201 +9,132 @@ const { JWT_SECRET, JWT_EXPIRES_IN } = process.env;
 const registerUser = async (req, res) => {
   try {
     const { name, username, email, password } = req.body;
+
     if (!name || !username || !email || !password) {
-      res.status(400).end();
+      return res.status(400).send({ error: true, message: 'Missing fields' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 8);
+
     const userData = {
       name,
       username,
       email,
       password: hashedPassword,
     };
+
     const user = new User(userData);
     const savedUser = await user.save();
-    const token = jwt.sign({ user: savedUser }, JWT_SECRET, {
+
+    // (Optional but recommended) don’t return password even if hashed
+    const userSafe = savedUser.toObject();
+    delete userSafe.password;
+
+    const token = jwt.sign({ user: { _id: savedUser._id } }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
     });
-    res.send({ user: savedUser, token });
+
+    return res.send({ user: userSafe, token });
   } catch (err) {
     console.log('POST signup, Something Went Wrong: ', err);
-    res.status(400).send({ error: true, message: err.message });
+    return res.status(400).send({ error: true, message: err.message });
   }
 };
 
-//SIGN IN API
+// SIGN IN API
 const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
-    if (!username || !password) {
-      res.status(400).end();
-      return;
-    }
 
-    // check if user exists
+    if (!username || !password) {
+      return res.status(400).send({ error: true, message: 'Missing credentials' });
+    }
 
     const user = await User.findOne({ username });
     if (!user) {
-      res.status(400).json({ msg: 'Invalid username or password' });
-      return;
+      return res.status(400).json({ error: true, message: 'Invalid username or password' });
     }
 
-    // check if password is correct
-    const hashedPassword = user.password;
-    const isMatch = await bcrypt.compare(password, hashedPassword);
-
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.status(400).json({ msg: 'Invalid username or password 2' });
-      return;
+      return res.status(400).json({ error: true, message: 'Invalid username or password' });
     }
-    const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-    res.send({ user, token });
-    // res.status(200).json({ token });
+
+    // (Optional) don’t return password
+    const userSafe = user.toObject();
+    delete userSafe.password;
+
+    const token = jwt.sign({ user: { _id: user._id } }, JWT_SECRET, {
+      expiresIn: JWT_EXPIRES_IN,
+    });
+
+    return res.send({ user: userSafe, token });
   } catch (err) {
     console.log('POST auth/signin, Something Went Wrong: ', err);
-    res.status(400).send({ error: true, message: err.message });
+    return res.status(400).send({ error: true, message: err.message });
   }
 };
 
 // GET USER FROM TOKEN API
 const me = async (req, res) => {
   const defaultReturnObject = { authenticated: false, user: null };
+
   try {
-    const token = String(req?.headers?.authorization?.replace('Bearer ', ''));
-    // const token = String(req.headers.authorization?.replace('Bearer ', ''));
-    const decoded = jwt.verify(token, JWT_SECRET);
-    if (!decoded) {
-      res.status(400).json(defaultReturnObject);
-      return;
+    const authHeader = req?.headers?.authorization || '';
+    const token = String(authHeader).replace('Bearer ', '').trim();
+
+    if (!token) {
+      return res.status(400).json(defaultReturnObject);
     }
 
-    const user = await User.findOne({ _id: decoded.user._id });
-    if (!user) {
-      res.status(400).json(defaultReturnObject);
-      return;
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const userId = decoded?.user?._id;
+
+    if (!userId) {
+      return res.status(400).json(defaultReturnObject);
     }
-    delete user.password;
-    res.status(200).json({ authenticated: true, user });
+
+    // ✅ exclude password safely
+    const user = await User.findById(userId).select('-password');
+    if (!user) {
+      return res.status(400).json(defaultReturnObject);
+    }
+
+    return res.status(200).json({ authenticated: true, user });
   } catch (err) {
-    console.log('POST me, Something Went Wrong', err);
-    res.status(400).json(defaultReturnObject);
+    console.log('POST/GET me, Something Went Wrong', err);
+    return res.status(400).json(defaultReturnObject);
   }
 };
 
-// update user
-// update a contact
+// UPDATE USER
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Optional safety: prevent password update here unless you re-hash
+    if (req.body?.password) {
+      return res.status(400).json({
+        error: true,
+        message: 'Password updates not supported here.',
+      });
+    }
+
     const updatedUser = await User.findByIdAndUpdate(id, req.body, {
       new: true,
-    });
-    res.json(updatedContact);
+      runValidators: true,
+    }).select('-password');
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: true, message: 'User not found' });
+    }
+
+    return res.json(updatedUser);
   } catch (error) {
-    res.send(error);
+    console.log('PUT/PATCH updateUser, Something Went Wrong', error);
+    return res.status(400).send({ error: true, message: error.message });
   }
 };
 
 export { registerUser, loginUser, me, updateUser };
 
-// // older version
-
-// import 'dotenv/config';
-// // import { generateToken, decodeToken } from '../utils.js';
-// import jwt from 'jsonwebtoken';
-// import bcrypt from 'bcrypt';
-// import { User } from '../models/userModel.js';
-
-// const registerUser = async (req, res) => {
-//   try {
-//     const { name, username, email, password } = req.body;
-//     if (!username || !email || !password) {
-//       return res.status(400).json({ msg: 'Not all fields have been entered.' });
-//     }
-//     if (password.length < 5) {
-//       return res
-//         .status(400)
-//         .json({ msg: 'The password needs to be at least 5 characters long.' });
-//     }
-//     const existingUser = await User.findOne({
-//       email: email,
-//     });
-//     if (existingUser) {
-//       return res
-//         .status(400)
-//         .json({ msg: 'An account with this email already exists.' });
-//     }
-//     if (!name) {
-//       name = email;
-//     }
-//     const token = jwt.sign({username: username }, process.env.JWT_SECRET);
-//     const hashedpass = await bcrypt.hash(password, 10);
-//     const newUser = new User({
-//       name: name,
-//       username: username,
-//       email: email,
-//       password: hashedpass,
-//       token,
-//     });
-//     const savedUser = await newUser.save();
-//     res.json(savedUser);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// // -----
-// const loginUser = async (req, res) => {
-//   console.log('loginUser');
-//   try {
-//     const { username, password } = req.body;
-//     if (!username || !password) {
-//       return res.status(400).json({ error: 'please complete all details!' });
-//     }
-//     const user = await User.findOne({ username: username });
-//     if (!user) {
-//       return res.status(400).json({ error: 'user does not exist' });
-//     }
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     console.log('isMatch', isMatch);
-//     if (!isMatch) {
-//       return res.status(401).send('invalid password');
-//     }
-//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-//     await User.updateOne({ id: user._id}, { $set: { token: token } });
-//     // const token = jwt.sign({ username: username }, process.env.JWT_SECRET);
-//     // await User.updateOne({ username: username }, { $set: { token: token } });
-//     console.log('token', token);
-//     // console.log('token', token);
-//     // res.cookie('token', token, { httpOnly: true });
-//     res.status(200).json(token);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-// // log out user
-// const logoutUser = async (req, res) => {
-//   try {
-//     const { username, token } = req.body;
-//     await User.updateOne({ username: username }, { $set: { token: '' } });
-//     res.status(200).json({ msg: 'logged out' });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-// // get user profile
-// const getUserProfile = async (req, res) => {
-//   try {
-//     const { username } = req.body;
-//     const user = await User
-//       .findOne({ username: username })
-//     res.status(200).json(user);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-// export { registerUser, loginUser, logoutUser, getUserProfile };

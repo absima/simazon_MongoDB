@@ -1,0 +1,31 @@
+@host = http://localhost:5050
+
+###
+# Login (get token)
+POST {{host}}/user/login
+Content-Type: application/json
+
+{
+  "username": "defabc",
+  "password": "Abcabc11"
+}
+
+###
+POST {{host}}/orders
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY5NzYwMmZkOGMyZWVlYzgwYzZkMjE1MiJ9LCJpYXQiOjE3NjkzNjA2NDIsImV4cCI6MTc2OTc5MjY0Mn0.-ZBWcn3riQ9MpJMmHPzmLBvjgNg4M6QGaSSG8kYU4zc
+
+{
+  "orderItems": [
+    {
+      "productId": "64f0b0b0b0b0b0b0b0b0b0b0",
+      "title": "Test Item",
+      "qty": 2,
+      "price": 10,
+      "thumbnail": "x"
+    }
+  ],
+  "itemsPrice": 20,
+  "shippingPrice": 5,
+  "totalPrice": 25
+}

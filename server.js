@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import userRouter from './routes/userRoutes.js';
 import productRouter from './routes/productRoutes.js';
+import orderRouter from './routes/orderRoutes.js';
 import mongoConnect from './db/mongoConnection.js';
 
 mongoConnect();
@@ -27,6 +28,8 @@ app.post("/debug/admin-key", (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/product', productRouter);
+app.use('/orders', orderRouter);
+
 
 // app.get('/profile/:username', validateToken, (req, res) => {
 //   console.log('Token is valid.');

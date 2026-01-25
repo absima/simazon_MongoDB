@@ -1,0 +1,14 @@
+
+
+POST {{host}}/orders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "orderItems": [
+    { "productId": "123", "title": "Test Item", "qty": 2, "price": 10, "thumbnail": "x" }
+  ],
+  "itemsPrice": 20,
+  "shippingPrice": 5,
+  "totalPrice": 25
+}
