@@ -7,7 +7,7 @@ import {
   deleteProductByID,
 } from "../controllers/productControllers.js";
 
-import { requireAdminKey } from "../middleware/adminKey.js";
+import { requireAdminKey } from "../middleware/adminkey.js";
 
 const productRouter = express.Router();
 
