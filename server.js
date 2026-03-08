@@ -12,7 +12,23 @@ console.log('mongo connected');
 const app = express();
 const port = process.env.PORT || 5050;
 
-app.use(cors());
+const allowedOrigins = [
+  "https://simazon.netlify.app",
+  "http://localhost:5173",
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET","POST","PUT","DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,15 +41,8 @@ app.post("/debug/admin-key", (req, res) => {
   });
 });
 
-
 app.use('/user', userRouter);
 app.use('/product', productRouter);
 app.use('/orders', orderRouter);
-
-
-// app.get('/profile/:username', validateToken, (req, res) => {
-//   console.log('Token is valid.');
-//   console.log(req.username.username);
-// });
 
 app.listen(port, () => console.log(`listening to port ${port}`));
