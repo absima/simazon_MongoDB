@@ -11,6 +11,7 @@ const port = process.env.PORT || 5050;
 
 const allowedOrigins = [
   'https://simazon.netlify.app',
+  'https://simazone.netlify.app',
   'http://localhost:5173',
 ];
 
